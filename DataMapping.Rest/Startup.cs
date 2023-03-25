@@ -1,4 +1,5 @@
 using DataMapping.Mediator;
+using DataMapping.Models.Posts.Profiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -42,6 +43,8 @@ namespace DataMapping
             services.AddMediatR(cfg => {
                 cfg.RegisterServicesFromAssembly(typeof(MediatREntryPoint).Assembly);
             });
+
+            services.AddAutoMapper(typeof(SalidaProfile).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

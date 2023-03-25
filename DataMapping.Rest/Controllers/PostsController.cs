@@ -1,4 +1,5 @@
 ﻿using DataMapping.Models.Posts;
+using DataMapping.Models.Posts.Exceptions;
 using DataMapping.Models.Posts.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DataMapping.Controllers
@@ -30,25 +32,20 @@ namespace DataMapping.Controllers
         {
             try
             {
-                var posts = await _mediator.Send(new GetPostsRequest());
+                var post = await _mediator.Send(new GetPostByIdRequest(id));
+                return Ok(JsonSerializer.Serialize(post));
 
-                if(posts == null)
-                {
-                    return NotFound("No hay posts guardados.");
-                }
-                
-                var post = posts.FirstOrDefault(p => p.Id.Equals(id));
-
-                if(post == null)
-                {
-                    return NotFound("No existe un post con ese ID.");
-                }
-
-
-                
-                return Ok(post);
-
-            }catch (Exception ex)
+            }catch (EmptyPostsException ex)
+            {
+                _logger.LogInformation(ex, "No hay posts guardados.");
+                return NotFound("No hay posts guardados.");
+            }
+            catch (PostNotFoundException ex)
+            {
+                _logger.LogInformation(ex, "No existe un post con ese ID.");
+                return NotFound("No existe un post con ese ID.");
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Ha ocurrido un error.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ha ocurrido un error.");
