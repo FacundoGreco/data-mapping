@@ -1,3 +1,4 @@
+using DataMapping.Mediator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,9 +39,8 @@ namespace DataMapping
             });
 
             services.AddHttpClient();
-            //services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
             services.AddMediatR(cfg => {
-                cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(MediatREntryPoint).Assembly);
             });
         }
 

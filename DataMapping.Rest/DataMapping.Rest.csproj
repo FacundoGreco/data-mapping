@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataMapping.Mediator\DataMapping.Mediator.csproj" />
     <ProjectReference Include="..\DataMapping.Models\DataMapping.Models.csproj" />
   </ItemGroup>
 
